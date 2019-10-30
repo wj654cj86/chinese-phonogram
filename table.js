@@ -25,7 +25,7 @@ window.onload = function () {
 					for (let mr in pinyin['零']) {
 						let svg = text2xml(zhuyintext);
 						svg.getElementsByTagName('text')[0].textContent = mr;
-						svg.getElementsByTagName('text')[0].setAttribute('style', 'font-size:45px;');
+						svg.getElementsByTagName('text')[0].setAttribute('style', 'font-size:45px;font-family:DFKai-sb;');
 						svg.getElementsByTagName('svg')[0].setAttribute('x', -102);
 						svg.getElementsByTagName('svg')[0].setAttribute('y', ycnt * 102);
 						mytable.appendChild(svg.getElementsByTagName('svg')[0]);
@@ -40,8 +40,9 @@ window.onload = function () {
 							// console.log(mrobj);
 							let cc = c == '零' ? '口' : c;
 							if (pinyin[c][mr]) {
-								let d = consonants[cc][tt] + tonal[t] + middle[mrobj.m] + rhyme[mrobj.r][tt];
-								svg.getElementsByTagName('path')[2].setAttribute('d', d);
+								svg.getElementsByTagName('path')[2].setAttribute('d', consonants[cc][tt]);
+								svg.getElementsByTagName('path')[3].setAttribute('d', tonal[t] + middle[mrobj.m]);
+								svg.getElementsByTagName('path')[4].setAttribute('d', rhyme[mrobj.r][tt]);
 							}
 							svg.getElementsByTagName('svg')[0].setAttribute('x', xcnt * 102);
 							svg.getElementsByTagName('svg')[0].setAttribute('y', ycnt * 102);
@@ -54,7 +55,7 @@ window.onload = function () {
 					allsvg.push(mytable)
 					let btn = document.createElement("input");
 					btn.setAttribute("type", "button");
-					btn.setAttribute("value", t);
+					btn.setAttribute("value", tonalname[t]);
 					btn.onclick = function () {
 						console.log(t);
 						for (let i in allsvg) {
@@ -64,6 +65,8 @@ window.onload = function () {
 					};
 					mybutton.appendChild(btn);
 				}
+				mystring.innerHTML = '';
+				mybutton.getElementsByTagName('input')[0].click();
 			});
 		});
 	});

@@ -1,13 +1,13 @@
 window.onload = function () {
 	let sw = 204;
 	let sh = 102;
-	let w = Object.keys(pinyin).length * 102 + sw;
-	let h = Object.keys(pinyin['零']).length * 102 + sh;
+	let w = Object.keys(pinyin.all).length * 102 + sw;
+	let h = Object.keys(pinyin.all['零']).length * 102 + sh;
 	openfiletotext("tablestyle.svg", function (tabletext) {
 		openfiletotext("zhuyinstyle.svg", function (zhuyintext) {
 			openfiletotext("style.svg", function (text) {
 				let allsvg = [];
-				for (let t in tonal) {
+				for (let t in zhuyinpath.tonal) {
 					let tt = t == '1' ? 0 : 1;
 					let tm = (t == '1' || t == '3') ? 0 : 1;
 					let tablesvg = text2xml(tabletext);
@@ -16,7 +16,7 @@ window.onload = function () {
 					mytable.setAttribute('height', h);
 					mytable.setAttribute('viewBox', -sw + ' ' + -sh + ' ' + w + ' ' + h);
 					let xcnt = 0;
-					for (let c in pinyin) {
+					for (let c in pinyin.all) {
 						let svg = text2xml(zhuyintext);
 						svg.getElementsByTagName('text')[0].textContent = c;
 						svg.getElementsByTagName('svg')[0].setAttribute('x', xcnt * 102);
@@ -25,7 +25,7 @@ window.onload = function () {
 						xcnt++;
 					}
 					let ycnt = 0;
-					for (let mr in pinyin['零']) {
+					for (let mr in pinyin.all['零']) {
 						if (mr.length == 1) mr = '　' + mr;
 						for (let i = 0; i < 2; i++) {
 							let svg = text2xml(zhuyintext);
@@ -37,16 +37,16 @@ window.onload = function () {
 						ycnt++;
 					}
 					xcnt = 0;
-					for (let c in pinyin) {
+					for (let c in pinyin.all) {
 						let ycnt = 0;
-						for (let mr in pinyin[c]) {
+						for (let mr in pinyin.all[c]) {
 							let svg = text2xml(text);
-							let mrobj = findmr(mr);
+							let mrobj = pinyin.findmr(mr);
 							// console.log(mrobj);
-							if (pinyin[c][mr]) {
-								svg.getElementsByTagName('path')[3].setAttribute('d', consonants[c][tt]);
-								svg.getElementsByTagName('path')[4].setAttribute('d', tonal[t] + middle[mrobj.m][tm]);
-								svg.getElementsByTagName('path')[5].setAttribute('d', rhyme[mrobj.r][tt]);
+							if (pinyin.all[c][mr]) {
+								svg.getElementsByTagName('path')[3].setAttribute('d', zhuyinpath.consonant[c][tt]);
+								svg.getElementsByTagName('path')[4].setAttribute('d', zhuyinpath.tonal[t] + zhuyinpath.middle[mrobj.m][tm]);
+								svg.getElementsByTagName('path')[5].setAttribute('d', zhuyinpath.rhyme[mrobj.r][tt]);
 							}
 							svg.getElementsByTagName('svg')[0].setAttribute('x', xcnt * 102);
 							svg.getElementsByTagName('svg')[0].setAttribute('y', ycnt * 102);
@@ -59,7 +59,7 @@ window.onload = function () {
 					allsvg.push(mytable)
 					let btn = document.createElement("input");
 					btn.setAttribute("type", "button");
-					btn.setAttribute("value", tonalname[t]);
+					btn.setAttribute("value", pinyin.tonalname[t]);
 					btn.onclick = function () {
 						console.log(t);
 						for (let i in allsvg) {

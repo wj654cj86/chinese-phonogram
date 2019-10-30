@@ -37,11 +37,10 @@ var tonalname = {
 };
 
 function findmr(mr) {
-	let zero = '口';
 	let m, r;
 	switch (mr) {
 		case '零':
-			return { m: '零', r: zero };
+			return { m: '零', r: '零' };
 		case 'ㄨㄥ':
 			return { m: '零', r: 'ㄨㄥ' };
 		case 'ㄩㄥ':
@@ -52,7 +51,7 @@ function findmr(mr) {
 	for (let mm in pinyinrhyme) {
 		if (mr.search(mm) != -1) {
 			r = mr.replace(mm, '');
-			if (r == '') r = zero;
+			if (r == '') r = '零';
 			return { m: mm, r: r };
 		}
 	}

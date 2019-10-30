@@ -1,34 +1,39 @@
 window.onload = function () {
-	let w = Object.keys(pinyin).length * 102;
-	let h = Object.keys(pinyin['零']).length * 102;
+	let sw = 204;
+	let sh = 102;
+	let w = Object.keys(pinyin).length * 102 + sw;
+	let h = Object.keys(pinyin['零']).length * 102 + sh;
 	openfiletotext("tablestyle.svg", function (tabletext) {
 		openfiletotext("zhuyinstyle.svg", function (zhuyintext) {
 			openfiletotext("style.svg", function (text) {
 				let allsvg = [];
 				for (let t in tonal) {
 					let tt = t == '1' ? 0 : 1;
+					let tm = (t == '1' || t == '3') ? 0 : 1;
 					let tablesvg = text2xml(tabletext);
 					let mytable = tablesvg.getElementsByTagName('svg')[0];
-					mytable.setAttribute('width', w + 102);
-					mytable.setAttribute('height', h + 102);
-					mytable.setAttribute('viewBox', '-102 -102 ' + (w + 102) + ' ' + (h + 102));
+					mytable.setAttribute('width', w);
+					mytable.setAttribute('height', h);
+					mytable.setAttribute('viewBox', -sw + ' ' + -sh + ' ' + w + ' ' + h);
 					let xcnt = 0;
 					for (let c in pinyin) {
 						let svg = text2xml(zhuyintext);
 						svg.getElementsByTagName('text')[0].textContent = c;
 						svg.getElementsByTagName('svg')[0].setAttribute('x', xcnt * 102);
-						svg.getElementsByTagName('svg')[0].setAttribute('y', -102);
+						svg.getElementsByTagName('svg')[0].setAttribute('y', -sh);
 						mytable.appendChild(svg.getElementsByTagName('svg')[0]);
 						xcnt++;
 					}
 					let ycnt = 0;
 					for (let mr in pinyin['零']) {
-						let svg = text2xml(zhuyintext);
-						svg.getElementsByTagName('text')[0].textContent = mr;
-						svg.getElementsByTagName('text')[0].setAttribute('style', 'font-size:45px;font-family:DFKai-sb;');
-						svg.getElementsByTagName('svg')[0].setAttribute('x', -102);
-						svg.getElementsByTagName('svg')[0].setAttribute('y', ycnt * 102);
-						mytable.appendChild(svg.getElementsByTagName('svg')[0]);
+						if (mr.length == 1) mr = '　' + mr;
+						for (let i = 0; i < 2; i++) {
+							let svg = text2xml(zhuyintext);
+							svg.getElementsByTagName('text')[0].textContent = mr[i];
+							svg.getElementsByTagName('svg')[0].setAttribute('x', i * 102 - sw);
+							svg.getElementsByTagName('svg')[0].setAttribute('y', ycnt * 102);
+							mytable.appendChild(svg.getElementsByTagName('svg')[0]);
+						}
 						ycnt++;
 					}
 					xcnt = 0;
@@ -38,11 +43,10 @@ window.onload = function () {
 							let svg = text2xml(text);
 							let mrobj = findmr(mr);
 							// console.log(mrobj);
-							let cc = c == '零' ? '口' : c;
 							if (pinyin[c][mr]) {
-								svg.getElementsByTagName('path')[2].setAttribute('d', consonants[cc][tt]);
-								svg.getElementsByTagName('path')[3].setAttribute('d', tonal[t] + middle[mrobj.m]);
-								svg.getElementsByTagName('path')[4].setAttribute('d', rhyme[mrobj.r][tt]);
+								svg.getElementsByTagName('path')[3].setAttribute('d', consonants[c][tt]);
+								svg.getElementsByTagName('path')[4].setAttribute('d', tonal[t] + middle[mrobj.m][tm]);
+								svg.getElementsByTagName('path')[5].setAttribute('d', rhyme[mrobj.r][tt]);
 							}
 							svg.getElementsByTagName('svg')[0].setAttribute('x', xcnt * 102);
 							svg.getElementsByTagName('svg')[0].setAttribute('y', ycnt * 102);

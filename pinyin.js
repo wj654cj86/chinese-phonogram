@@ -40,8 +40,18 @@ var pinyin = {
 		switch (mr) {
 			case '零':
 				return { m: '零', r: '零' };
+			case 'ㄧㄢ':
+				return { m: 'ㄧ', r: 'ㄣ' };
+			case 'ㄧㄣ':
+				return { m: 'ㄧ', r: 'ㄧㄣ' };
+			case 'ㄧㄥ':
+				return { m: 'ㄧ', r: 'ㄧㄥ' };
 			case 'ㄨㄥ':
 				return { m: '零', r: 'ㄨㄥ' };
+			case 'ㄩㄢ':
+				return { m: 'ㄩ', r: 'ㄣ' };
+			case 'ㄩㄣ':
+				return { m: 'ㄩ', r: 'ㄧㄣ' };
 			case 'ㄩㄥ':
 				return { m: 'ㄧ', r: 'ㄨㄥ' };
 			default:

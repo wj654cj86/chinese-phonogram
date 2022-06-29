@@ -1,12 +1,15 @@
-window.onload = async function () {
-	let tablepromise = promise(openfile, 'tablestyle.svg'),
-		zhuyinpromise = promise(openfile, 'zhuyinstyle.svg'),
-		basepromise = promise(openfile, 'basestyle.svg'),
-		phonogrampromise = promise(openfile, 'style.svg');
-	let tabletext = await tablepromise,
-		zhuyintext = await zhuyinpromise,
-		basetext = await basepromise,
-		phonogramtext = await phonogrampromise;
+window.onload = async () => {
+	let [
+		tabletext,
+		zhuyintext,
+		basetext,
+		phonogramtext
+	] = await Promise.all([
+		'tablestyle.svg',
+		'zhuyinstyle.svg',
+		'basestyle.svg',
+		'style.svg'
+	].map(v => promise(openfile, v)));
 	let sw = 204;
 	let sh = 102;
 	let w = Object.keys(pinyin.all).length * 102 + sw;
@@ -22,7 +25,7 @@ window.onload = async function () {
 		svg.getElementsByTagName('text')[0].textContent = c;
 		svg.setAttribute('x', xcnt * 102);
 		svg.setAttribute('y', -sh);
-		tablesvg.appendChild(svg);
+		tablesvg.append(svg);
 		xcnt++;
 	}
 	let ycnt = 0;
@@ -33,7 +36,7 @@ window.onload = async function () {
 			svg.getElementsByTagName('text')[0].textContent = mr[i];
 			svg.setAttribute('x', i * 102 - sw);
 			svg.setAttribute('y', ycnt * 102);
-			tablesvg.appendChild(svg);
+			tablesvg.append(svg);
 		}
 		ycnt++;
 	}
@@ -47,7 +50,7 @@ window.onload = async function () {
 			path.setAttribute('class', 'path');
 			path.setAttribute('id', 'c' + c + i);
 			path.setAttribute('d', zhuyinpath.consonant[c][i]);
-			basesvg.appendChild(path);
+			basesvg.append(path);
 		}
 		xcnt++;
 	}
@@ -58,7 +61,7 @@ window.onload = async function () {
 			path.setAttribute('class', 'path');
 			path.setAttribute('id', 'm' + t + m);
 			path.setAttribute('d', zhuyinpath.tonal[t] + zhuyinpath.middle[m][tm]);
-			basesvg.appendChild(path);
+			basesvg.append(path);
 		}
 	}
 	for (let r in zhuyinpath.rhyme) {
@@ -67,12 +70,12 @@ window.onload = async function () {
 			path.setAttribute('class', 'path');
 			path.setAttribute('id', 'r' + r + i);
 			path.setAttribute('d', zhuyinpath.rhyme[r][i]);
-			basesvg.appendChild(path);
+			basesvg.append(path);
 		}
 		xcnt++;
 	}
-	tablesvg.appendChild(basesvg);
-	mydiv.appendChild(tablesvg);
+	tablesvg.append(basesvg);
+	mydiv.append(tablesvg);
 	for (let t in zhuyinpath.tonal) {
 		let tt = t == '1' ? 0 : 1;
 		let tablesvg = text2xml(tabletext).getElementsByTagName('svg')[0];
@@ -92,12 +95,12 @@ window.onload = async function () {
 				}
 				svg.setAttribute('x', xcnt * 102);
 				svg.setAttribute('y', ycnt * 102);
-				tablesvg.appendChild(svg);
+				tablesvg.append(svg);
 				ycnt++;
 			}
 			xcnt++;
 		}
-		mydiv.appendChild(tablesvg);
+		mydiv.append(tablesvg);
 		allsvg.push(tablesvg)
 		let btn = document.createElement("input");
 		btn.setAttribute("type", "button");
@@ -108,7 +111,7 @@ window.onload = async function () {
 			}
 			tablesvg.style.zIndex = 2;
 		};
-		mybutton.appendChild(btn);
+		mybutton.append(btn);
 	}
 	mystring.innerHTML = '';
 	mybutton.getElementsByTagName('input')[0].click();
@@ -127,5 +130,5 @@ window.onload = async function () {
 			mybutton.getElementsByTagName('input')[5].value = "描線關閉";
 		}
 	};
-	mybutton.appendChild(btn);
+	mybutton.append(btn);
 };

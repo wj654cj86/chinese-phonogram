@@ -1,5 +1,5 @@
 #mystring,
-#mybutton input {
+#mybutton button {
     font-size: 50px;
 }
 
@@ -11,6 +11,11 @@
     position: absolute;
     left    : 0px;
     top     : 0px;
+}
+
+.text {
+    font-size  : 100px;
+    font-family: DFKai-sb;
 }
 
 .path {

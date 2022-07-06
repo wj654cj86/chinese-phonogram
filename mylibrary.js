@@ -115,6 +115,20 @@ function xml2text(xml) {
 	return (new XMLSerializer()).serializeToString(xml);
 }
 
+function text2html(text) {
+	let t = document.createElement('template');
+	t.innerHTML = text;
+	return t.content.firstChild;
+}
+
+function text2svg(text) {
+	return (new DOMParser()).parseFromString(
+		`<?xml version="1.0" encoding="UTF-8"?>
+			<svg xmlns="http://www.w3.org/2000/svg"
+				 xmlns:xlink="http://www.w3.org/1999/xlink">${text}
+			</svg>`, "image/svg+xml").querySelector('svg').firstChild;
+}
+
 function copyxml(xml) {
 	return text2xml(xml2text(xml));
 }

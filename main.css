@@ -1,0 +1,27 @@
+#mystring,
+#mybutton button {
+    font-size: 50px;
+}
+
+#mydiv {
+    position: absolute;
+}
+
+#mydiv svg {
+    position: absolute;
+    left    : 0px;
+    top     : 0px;
+}
+
+.text {
+    font-size  : 100px;
+    font-family: DFKai-sb;
+}
+
+.path {
+    stroke         : #000;
+    stroke-width   : 4;
+    stroke-linecap : round;
+    stroke-linejoin: round;
+    fill           : none;
+}

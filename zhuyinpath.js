@@ -1,4 +1,4 @@
-var zhuyinpath = {
+export default {
 	consonant: {
 		'零': ['', ''],
 		'ㄅ': ['M-20-40v30h40', 'M-20-40v20h40'],

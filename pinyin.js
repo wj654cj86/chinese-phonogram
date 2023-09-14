@@ -56,7 +56,7 @@ let findmr = mr => {
 		default:
 			break;
 	}
-	for (let mm in rhyme) {
+	for (let [mm] of rhyme.entries()) {
 		if (mr.search(mm) != -1) {
 			let r = mr.replace(mm, '');
 			if (r == '') r = '零';

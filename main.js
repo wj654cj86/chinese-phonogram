@@ -14,12 +14,12 @@ let h = Object.keys(pinyin.all['零']).length * size + sh;
 let allsvg = [];
 let tablesvg = text2svg(`<svg width="${w}" height="${h}" viewBox="${[-sw, -sh, w, h].join(' ')}"></svg>`);
 let xcnt = 0;
-for (let c in pinyin.all) {
+for (let [c] of pinyin.all.entries()) {
 	tablesvg.append(createzhuyin(c, xcnt * size, -sh));
 	xcnt++;
 }
 let ycnt = 0;
-for (let mr in pinyin.all['零']) {
+for (let [mr] of pinyin.all['零'].entries()) {
 	if (mr.length == 1) mr = '　' + mr;
 	for (let i = 0; i < 2; i++) {
 		tablesvg.append(createzhuyin(mr[i], i * size - sw, ycnt * size));
@@ -32,39 +32,39 @@ basesvg.setAttribute('y', 0);
 basesvg.removeAttribute('xmlns');
 basesvg.removeAttribute('xmlns:xlink');
 xcnt = 0;
-for (let c in zhuyinpath.consonant) {
+for (let [c, v] of zhuyinpath.consonant.entries()) {
 	for (let i = 0; i < 2; i++) {
-		let path = text2svg(`<path class="path" id="c${c + i}" d="${zhuyinpath.consonant[c][i]}"/>`);
+		let path = text2svg(`<path class="path" id="c${c + i}" d="${v[i]}"/>`);
 		basesvg.append(path);
 	}
 	xcnt++;
 }
-for (let t in zhuyinpath.tonal) {
+for (let [t, v] of zhuyinpath.tonal.entries()) {
 	let tm = (t == '1' || t == '3') ? 0 : 1;
-	for (let m in zhuyinpath.middle) {
-		let path = text2svg(`<path class="path" id="m${t + m}" d="${zhuyinpath.tonal[t] + zhuyinpath.middle[m][tm]}"/>`);
+	for (let [m, w] of zhuyinpath.middle.entries()) {
+		let path = text2svg(`<path class="path" id="m${t + m}" d="${v + w[tm]}"/>`);
 		basesvg.append(path);
 	}
 }
-for (let r in zhuyinpath.rhyme) {
+for (let [r, v] of zhuyinpath.rhyme.entries()) {
 	for (let i = 0; i < 2; i++) {
-		let path = text2svg(`<path class="path" id="r${r + i}" d="${zhuyinpath.rhyme[r][i]}"/>`);
+		let path = text2svg(`<path class="path" id="r${r + i}" d="${v[i]}"/>`);
 		basesvg.append(path);
 	}
 	xcnt++;
 }
 tablesvg.append(basesvg);
 mydiv.append(tablesvg);
-for (let t in zhuyinpath.tonal) {
+for (let [t] of zhuyinpath.tonal.entries()) {
 	let tt = t == '1' ? 0 : 1;
 	let tablesvg = text2svg(`<svg width="${w}" height="${h}" viewBox="${[-sw, -sh, w, h].join(' ')}"></svg>`);
 	xcnt = 0;
-	for (let c in pinyin.all) {
+	for (let [c, v] of pinyin.all.entries()) {
 		ycnt = 0;
-		for (let mr in pinyin.all[c]) {
+		for (let [mr, w] of v.entries()) {
 			let svg = text2svg(`<svg x="${xcnt * size}" y="${ycnt * size}" width="100" height="100" viewBox="-50 -50 100 100"><use xlink:href="#base"/></svg>`);
 			let mrobj = pinyin.findmr(mr);
-			if (pinyin.all[c][mr]) {
+			if (w) {
 				svg.append(text2svg(`<use xlink:href="#c${c + tt}"/>`));
 				svg.append(text2svg(`<use xlink:href="#m${t + mrobj.m}"/>`));
 				svg.append(text2svg(`<use xlink:href="#r${mrobj.r + tt}"/>`));
@@ -78,8 +78,8 @@ for (let t in zhuyinpath.tonal) {
 	allsvg.push(tablesvg)
 	let btn = text2html(`<button>${pinyin.tonalname[t]}</button>`);
 	btn.onclick = function () {
-		for (let i in allsvg) {
-			allsvg[i].style.zIndex = 1;
+		for (let [i, v] of allsvg.entries()) {
+			v.style.zIndex = 1;
 		}
 		tablesvg.style.zIndex = 2;
 	};
